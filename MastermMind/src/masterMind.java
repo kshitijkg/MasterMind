@@ -3,11 +3,11 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class masterMind {
-	public static String[] codeGenerate() {
+	public static String[] codeGenerate(int len) {
 		String[] colors = { "Red", "Blue", "Green", "Yellow", "Orange", "Black", "Violet" };
 		printer(colors);
-		String[] code = new String[4];
-		for (int i = 0; i < 4; i++) {
+		String[] code = new String[len];
+		for (int i = 0; i <len; i++) {
 			code[i] = colors[(int) Math.floor(Math.random() * 6)];
 		}
 		return code;
@@ -27,10 +27,10 @@ public class masterMind {
 	    }
 	  }
 
-	public static String[] compare(String[] a, String[] b) {
-		String[] answer = new String[4];
-		for (int i = 0; i < 4; i++) {
-			for (int y = i; y < 4; y++) {
+	public static String[] compare(String[] a, String[] b, int len) {
+		String[] answer = new String[len];
+		for (int i = 0; i < len; i++) {
+			for (int y = i; y < len; y++) {
 				if ((a[i].toUpperCase()).equals(b[y].toUpperCase()) && !a[i].equals("") && !b[i].equals("") && i == y) {
 					answer[i] = "red";
 					break;
@@ -47,9 +47,9 @@ public class masterMind {
 		return answer;
 	}
 
-	public static boolean checker(String[] answer) {
+	public static boolean checker(String[] answer, int len) {
 		boolean isWin = true;
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < len; i++) {
 			if (answer[i].equals("white") || answer[i].equals("none")) {
 				isWin = false;
 			}
@@ -66,19 +66,21 @@ public class masterMind {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String[] code = codeGenerate();
+		System.out.println("Enter The Secret Code Length/ Difficulty");
+		Scanner reader = new Scanner(System.in);
+		int len= Integer.parseInt(reader.nextLine());
+		String[] code = codeGenerate(len);
 		int counter = 1;
 		boolean isWin = false;
-		Scanner reader = new Scanner(System.in);
 		String n ="";
-		//printer(code);
-		while (counter <= 10 && isWin != true) {
+		printer(code);
+		while (counter <= len*2+5 && isWin != true) {
 			System.out.println("Enter The colors");
 			n = reader.nextLine();
 			String[] splited = n.split(" ");
-			String[] answer = compare(splited, code);
+			String[] answer = compare(splited, code, len);
 			printer(answer);
-			if (checker(answer)) {
+			if (checker(answer, len)) {
 				isWin = true;
 				System.out.println("You win");
 			}
